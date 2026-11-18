@@ -23,6 +23,7 @@ if (string.IsNullOrWhiteSpace(projectId))
 // Existing Firebase Firestore connection
 builder.Services.AddSingleton(FirestoreDb.Create(projectId));
 builder.Services.AddSingleton<PartRepository>();
+builder.Services.AddSingleton<OrderRepository>();
 
 // Firebase Admin SDK
 builder.Services.AddSingleton(provider =>
