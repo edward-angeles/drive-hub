@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-namespace drivehub.Models;
+namespace DriveHub.Models;
 
 public class CartItem
 {
