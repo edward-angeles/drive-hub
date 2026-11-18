@@ -1,5 +1,8 @@
+
 using System.ComponentModel.DataAnnotations;
-namespace drivehub.Models;
+
+namespace DriveHub.Models;
+
 public enum PartType
 {
     Brakes,
@@ -87,5 +90,4 @@ public class CarPart
     [StringLength(100)]
     public string VehicleModelName { get; set; } = "";
 }
-
 
