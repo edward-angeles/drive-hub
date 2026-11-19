@@ -17,7 +17,7 @@ public class CartItem
 
     [Required]
     [StringLength(120)]
-    public string partName { get; set; } = "";
+    public string PartName { get; set; } = "";
 
     public string? ImageUrl { get; set; } = "";
 

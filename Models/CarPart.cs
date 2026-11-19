@@ -38,6 +38,8 @@ public class CarPart
     // Seller ownership
     public string SellerId { get; set; } = "";
 
+    
+
     // Part information
     [Required]
     [StringLength(120)]
