@@ -16,7 +16,9 @@ public class PartsController(
         PartType? category,
         int? vehicleYear,
         int? vehicleMakeId,
-        int? vehicleModelId)
+        int? vehicleModelId,
+        PartCondition? condition,
+        decimal? price)
     {
         var parts = await repo.GetAllAsync();
 
@@ -39,6 +41,20 @@ public class PartsController(
         {
             parts = parts.Where(part =>
                 part.Category == category.Value
+            ).ToList();
+        }
+
+        if(condition.HasValue)
+        {
+            parts = parts.Where(part =>
+                part.Condition == condition.Value
+            ).ToList();
+        }
+
+        if(price.HasValue)
+        {
+            parts = parts.Where(part =>
+                part.Price <= price.Value
             ).ToList();
         }
 
@@ -68,6 +84,8 @@ public class PartsController(
         ViewBag.VehicleYear = vehicleYear;
         ViewBag.VehicleMakeId = vehicleMakeId;
         ViewBag.VehicleModelId = vehicleModelId;
+        ViewBag.Condition = condition;
+        ViewBag.Price = price; 
 
         return View(parts);
     }
@@ -77,9 +95,10 @@ public class PartsController(
     {
         var part = await repo.GetAsync(id);
 
-        return part == null
-            ? NotFound()
-            : View(part);
+       if (part == null)
+            return NotFound();
+
+        return View(part);
     }
 
     // SELLER DASHBOARD
