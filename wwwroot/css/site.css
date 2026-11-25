@@ -209,3 +209,31 @@
         align-items: flex-start;
     }
 }
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.site-nav a {
+    margin-right: 0;
+    white-space: nowrap;
+}
+
+.site-nav form {
+    margin: 0;
+}
+
+@media (max-width: 700px) {
+    header {
+        flex-wrap: wrap;
+        padding: 16px 24px;
+    }
+
+    .site-nav {
+        flex-basis: 100%;
+        gap: 12px;
+    }
+}

@@ -4,7 +4,20 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Drive Hub is a web application that allows users to buy car parts.</p>
-    <p>To get started, please log in or create an account.</p>
     <a asp-controller="Parts" asp-action="Index" class="btn btn-primary">Browse Parts</a>
-    <a asp-controller="Parts" asp-action="Create" class="btn btn-success">Sell a Part</a>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <a asp-controller="Orders" asp-action="Index" class="btn btn-outline-primary">My Orders</a>
+
+        @if (User.IsInRole("Seller"))
+        {
+            <a asp-controller="Parts" asp-action="Manage" class="btn btn-success">Manage Inventory</a>
+            <a asp-controller="Orders" asp-action="Seller" class="btn btn-outline-success">Seller Orders</a>
+        }
+    }
+    else
+    {
+        <a asp-controller="Account" asp-action="Register" class="btn btn-success">Create an Account</a>
+    }
 </div>

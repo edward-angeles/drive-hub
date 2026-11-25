@@ -21,6 +21,10 @@
           asp-action="Login"
           method="post">
 
+        <input type="hidden"
+               name="returnUrl"
+               value="@ViewData["ReturnUrl"]" />
+
         <div asp-validation-summary="All"
              style="color: #dc2626;"></div>
 
@@ -47,7 +51,8 @@
 
     <p style="margin-top: 25px;">
         Don't have an account?
-        <a asp-action="Register">Register here</a>
+        <a asp-action="Register"
+           asp-route-returnUrl="@ViewData["ReturnUrl"]">Register here</a>
     </p>
 
 </div>

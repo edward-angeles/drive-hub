@@ -10,12 +10,21 @@
 <body>
     <header>
         <a class="brand" asp-controller="Parts" asp-action="Index">DRIVE HUB</a>
-        <nav>
+        <nav class="site-nav" aria-label="Primary navigation">
             <a asp-controller="Parts" asp-action="Index">Marketplace</a>
-            <a asp-controller="Parts" asp-action="Manage">Seller demo</a>
+            <a asp-page="/Index">Welcome</a>
+            <a asp-page="/Privacy">Privacy</a>
 
             @if (User.Identity?.IsAuthenticated == true)
             {
+                <a asp-controller="Orders" asp-action="Index">My orders</a>
+
+                @if (User.IsInRole("Seller"))
+                {
+                    <a asp-controller="Parts" asp-action="Manage">Inventory</a>
+                    <a asp-controller="Orders" asp-action="Seller">Seller orders</a>
+                }
+
                 <span>Hello, @User.Identity.Name!</span>
                 <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
                     <button type="submit">Logout</button>
@@ -23,8 +32,8 @@
             }
             else
             {
-                <a asp-controller="Account" asp-action="Login">Login</a>
-                <a asp-controller="Account" asp-action="Register">Register</a>
+                <a asp-controller="Account" asp-action="Login">Sign in</a>
+                <a asp-controller="Account" asp-action="Register">Create account</a>
             }
         </nav>
     </header>
