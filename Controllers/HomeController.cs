@@ -14,6 +14,12 @@ namespace DriveHub.Controllers
             return Redirect("/Privacy");
         }
 
+        public IActionResult About()
+        {
+            ViewData["Title"] = "About Drive Hub";
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

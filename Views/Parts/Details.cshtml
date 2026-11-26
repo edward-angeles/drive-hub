@@ -4,104 +4,38 @@
     ViewData["Title"] = Model.Name;
 }
 
-<p>
-    <a asp-action="Index">← Back to marketplace</a>
-</p>
-
-<div class="card detail">
-
-    <span class="eyebrow">
-        @Model.Category • @Model.Condition
-    </span>
-
+<div class="breadcrumb"><a asp-action="Index">Marketplace</a><span>/</span><span>@Model.Name</span></div>
+<div class="detail-layout">
+<section class="detail-card">
+    <div class="detail-visual">
+        <span>@Model.Category</span>
+        <strong>@Model.Manufacturer</strong>
+    </div>
+</section>
+<section class="detail-info">
+    <span class="eyebrow">@Model.Category • @Model.Condition</span>
     <h1>@Model.Name</h1>
+    <p class="detail-subtitle">@Model.Manufacturer · @Model.PartNumber</p>
+    <h2 class="detail-price">@Model.Price.ToString("C")</h2>
+    <div class="stock-line @(Model.Quantity == 0 ? "out" : "")">@((Model.Quantity == 0) ? "Out of stock" : $"{Model.Quantity} in stock")</div>
 
-    <h2>@Model.Price.ToString("C")</h2>
 
-    <h3>Part Information</h3>
-
-    <p>
-        <strong>Manufacturer:</strong>
-        @Model.Manufacturer
-    </p>
-
-    <p>
-        <strong>Part number:</strong>
-        @Model.PartNumber
-    </p>
-
-    <p>
-        <strong>Car-Part grade:</strong>
-        @Model.Grade (seller-entered)
-    </p>
-
-    <p>
-        <strong>Quality:</strong>
-        @Model.QualityScore/100
-    </p>
-
-    <p>
-        <strong>Warranty:</strong>
-        @Model.WarrantyMonths months
-    </p>
-
-    <p>
-        <strong>Quantity:</strong>
-        @Model.Quantity
-    </p>
-
-    @if (Model.MileageKm.HasValue)
+    <h3>Specifications</h3>
+    <div class="spec-grid">
+        <div><span>Grade</span><strong>@Model.Grade</strong></div>
+        <div><span>Quality score</span><strong>@Model.QualityScore/100</strong></div>
+        <div><span>Warranty</span><strong>@Model.WarrantyMonths months</strong></div>
+        @if (Model.MileageKm.HasValue) { <div><span>Mileage</span><strong>@Model.MileageKm.Value.ToString("N0") km</strong></div> }
+    </div>
+    <h3>Compatible vehicle</h3>
+    @if (Model.VehicleYear.HasValue && !string.IsNullOrWhiteSpace(Model.VehicleMakeName))
     {
-        <p>
-            <strong>Mileage:</strong>
-            @Model.MileageKm.Value.ToString("N0") km
-        </p>
-    }
-
-    <h3>Compatible Vehicle</h3>
-
-    @if (Model.VehicleYear.HasValue &&
-         Model.VehicleMakeId.HasValue &&
-         Model.VehicleModelId.HasValue)
-    {
-        <p>
-            <strong>Year:</strong>
-            @Model.VehicleYear
-        </p>
-
-        <p>
-            <strong>Make:</strong>
-            @Model.VehicleMakeName
-        </p>
-
-        <p>
-            <strong>Model:</strong>
-            @Model.VehicleModelName
-        </p>
-
-        <p>
-            <em>
-                Vehicle compatibility is declared by the seller.
-                Physical fitment has not been independently verified.
-            </em>
-        </p>
+        <p class="compatibility">@Model.VehicleYear @Model.VehicleMakeName @Model.VehicleModelName</p>
+        <small>Seller-declared fitment. Verify compatibility before purchase.</small>
     }
     else
-    {
-        <p>
-            No compatible vehicle has been specified
-            for this listing.
-        </p>
-    }
-
+    { <p>No compatible vehicle specified.</p> }
     <h3>Description</h3>
-
     <p>@Model.Description</p>
-
-    <p>
-        <em>
-            Checkout will be added in a later milestone.
-        </em>
-    </p>
-
+</section>
 </div>

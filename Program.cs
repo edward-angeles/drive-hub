@@ -14,9 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Liam's MVC marketplace
 builder.Services.AddControllersWithViews();
 
-// Edward's Razor Pages
-builder.Services.AddRazorPages();
-
 // External APIs
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<VehicleApiService>();
@@ -128,10 +125,6 @@ app.UseAuthorization();
 
 // Edward's static asset mapping
 app.MapStaticAssets();
-
-// Edward's Razor Pages
-app.MapRazorPages()
-   .WithStaticAssets();
 
 // Liam's MVC controllers
 app.MapControllers();

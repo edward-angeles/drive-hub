@@ -297,6 +297,17 @@ public class AccountController : Controller
     {
         return View();
     }
+
+    [HttpGet]
+    [Authorize]
+    public IActionResult Profile()
+    {
+        ViewData["Title"] = "My Profile";
+        ViewBag.DisplayName = User.Identity?.Name;
+        ViewBag.Email = User.FindFirstValue(ClaimTypes.Email);
+        ViewBag.Role = User.IsInRole("Seller") ? "Seller" : "Buyer";
+        return View();
+    }
 }
 
 // REGISTRATION FORM MODEL

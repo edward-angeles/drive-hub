@@ -1,23 +1,23 @@
 @{
     ViewData["Title"] = "Home";
 }
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Drive Hub is a web application that allows users to buy car parts.</p>
-    <a asp-controller="Parts" asp-action="Index" class="btn btn-primary">Browse Parts</a>
+<section class="home-hero">
+    <div>
+        <p class="eyebrow">THE SMARTER WAY TO SOURCE</p>
+        <h1>Find the right part.<br><span>Get back on the road.</span></h1>
+        <p>Search verified listings, compare specifications, and order automotive parts with confidence.</p>
+        <div class="hero-actions">
+            <a asp-controller="Parts" asp-action="Index" class="primary-button">Browse marketplace</a>
+            @if (!(User.Identity?.IsAuthenticated ?? false))
+            {
+                <a asp-controller="Account" asp-action="Register" class="secondary-button">Create account</a>
+            }
+        </div>
+    </div>
+</section>
 
-    @if (User.Identity?.IsAuthenticated == true)
-    {
-        <a asp-controller="Orders" asp-action="Index" class="btn btn-outline-primary">My Orders</a>
-
-        @if (User.IsInRole("Seller"))
-        {
-            <a asp-controller="Parts" asp-action="Manage" class="btn btn-success">Manage Inventory</a>
-            <a asp-controller="Orders" asp-action="Seller" class="btn btn-outline-success">Seller Orders</a>
-        }
-    }
-    else
-    {
-        <a asp-controller="Account" asp-action="Register" class="btn btn-success">Create an Account</a>
-    }
-</div>
+<section class="home-feature-grid">
+    <article><span>01</span><h2>Browse by fitment</h2><p>Filter listings using vehicle year, make, model, category, and condition.</p></article>
+    <article><span>02</span><h2>Compare clearly</h2><p>Review grade, warranty, mileage, quality score, and price before buying.</p></article>
+    <article><span>03</span><h2>Sell with control</h2><p>Manage inventory and incoming orders from a dedicated seller workspace.</p></article>
+</section>

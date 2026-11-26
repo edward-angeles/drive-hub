@@ -1,2 +1,8 @@
 @model CarPart
-<h1>Add a car part</h1><form asp-action="Create" method="post"><partial name="_PartForm" model="Model"/></form>
+<section class="seller-form-page">
+    <div class="seller-heading"><div><p class="seller-eyebrow">SELLER PORTAL / INVENTORY</p><h1>Add a new part</h1><p>Create a listing and specify stock and vehicle fitment.</p></div></div>
+    <form asp-action="Create" method="post" class="seller-inventory-panel">
+        @Html.AntiForgeryToken()
+        <partial name="_PartForm" model="Model"/>
+    </form>
+</section>
