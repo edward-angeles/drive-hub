@@ -1,2 +1,11 @@
 @model CarPart
-<h1>Delete listing?</h1><p>Remove <strong>@Model.Name</strong> from inventory?</p><form asp-action="Delete" asp-route-id="@Model.Id" method="post"><button type="submit" class="danger">Delete permanently</button> <a asp-action="Manage">Cancel</a></form>
+<section class="empty-state delete-confirmation">
+    <p class="eyebrow">CONFIRM REMOVAL</p>
+    <h1>Delete this listing?</h1>
+    <p><strong>@Model.Name</strong> will be removed from your active inventory.</p>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="danger primary-button">Delete permanently</button>
+        <a asp-action="Manage" class="secondary-button">Cancel</a>
+    </form>
+</section>

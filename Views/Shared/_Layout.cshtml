@@ -8,32 +8,53 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <a class="brand" asp-controller="Parts" asp-action="Index">DRIVE HUB</a>
-        <nav>
+    <header class="topbar">
+        <a class="brand" asp-controller="Parts" asp-action="Index">
+            <img src="~/images/drive-hub-logo.png" alt="Drive Hub" />
+        </a>
+        <nav class="site-nav" aria-label="Primary navigation">
             <a asp-controller="Parts" asp-action="Index">Marketplace</a>
-            <a asp-controller="Parts" asp-action="Manage">Seller demo</a>
+            <a asp-controller="Home" asp-action="About">About</a>
 
             @if (User.Identity?.IsAuthenticated == true)
             {
-                <span>Hello, @User.Identity.Name!</span>
-                <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
-                    <button type="submit">Logout</button>
+                <a asp-controller="Orders" asp-action="Index">My Orders</a>
+                @if (!User.IsInRole("Seller"))
+                {
+                    <a asp-controller="Account" asp-action="Profile">Profile</a>
+                }
+
+                @if (User.IsInRole("Seller"))
+                {
+                    <a asp-controller="Parts" asp-action="Manage">Inventory</a>
+                    <a asp-controller="Orders" asp-action="Seller">Seller Orders</a>
+                    <a asp-controller="Account" asp-action="Profile">Profile</a>
+                }
+
+                <span class="nav-user">@User.Identity.Name</span>
+                <form asp-controller="Account" asp-action="Logout" method="post" class="nav-logout">
+                    <button type="submit">Sign out</button>
                 </form>
             }
             else
             {
-                <a asp-controller="Account" asp-action="Login">Login</a>
-                <a asp-controller="Account" asp-action="Register">Register</a>
+                <a asp-controller="Account" asp-action="Login">Sign in</a>
+                <a asp-controller="Account" asp-action="Register">Create account</a>
             }
         </nav>
     </header>
 
-    <main>
+    <main class="page-shell">
         @RenderBody()
     </main>
 
-    <footer>Drive Hub • Educational prototype • No real purchases</footer>
+    <footer class="site-footer">
+        <div>
+            <strong>DRIVE HUB</strong>
+            <span>Quality parts. Every drive.</span>
+        </div>
+        <p>Educational marketplace prototype · No real payments</p>
+    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

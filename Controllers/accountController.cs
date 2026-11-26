@@ -30,8 +30,9 @@ public class AccountController : Controller
     // REGISTER - GET
     [HttpGet]
     [AllowAnonymous]
-    public IActionResult Register()
+    public IActionResult Register(string? returnUrl = null)
     {
+        ViewData["ReturnUrl"] = returnUrl;
         return View(new RegisterViewModel());
     }
 
@@ -39,8 +40,12 @@ public class AccountController : Controller
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(RegisterViewModel model)
+    public async Task<IActionResult> Register(
+        RegisterViewModel model,
+        string? returnUrl = null)
     {
+        ViewData["ReturnUrl"] = returnUrl;
+
         if (!ModelState.IsValid)
             return View(model);
 
@@ -56,7 +61,9 @@ public class AccountController : Controller
             TempData["Success"] =
                 "Account created successfully! Please sign in.";
 
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction(
+                nameof(Login),
+                new { returnUrl });
         }
         catch (FirebaseAuthException)
         {
@@ -71,8 +78,9 @@ public class AccountController : Controller
     // LOGIN - GET
     [HttpGet]
     [AllowAnonymous]
-    public IActionResult Login()
+    public IActionResult Login(string? returnUrl = null)
     {
+        ViewData["ReturnUrl"] = returnUrl;
         return View(new LoginViewModel());
     }
 
@@ -80,8 +88,12 @@ public class AccountController : Controller
     [HttpPost]
     [AllowAnonymous]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(
+        LoginViewModel model,
+        string? returnUrl = null)
     {
+        ViewData["ReturnUrl"] = returnUrl;
+
         if (!ModelState.IsValid)
             return View(model);
 
@@ -260,6 +272,9 @@ public class AccountController : Controller
                     ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
                 });
 
+            if (Url.IsLocalUrl(returnUrl))
+                return LocalRedirect(returnUrl);
+
             return RedirectToAction("Index", "Parts");
         }
     }
@@ -280,6 +295,17 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult AccessDenied()
     {
+        return View();
+    }
+
+    [HttpGet]
+    [Authorize]
+    public IActionResult Profile()
+    {
+        ViewData["Title"] = "My Profile";
+        ViewBag.DisplayName = User.Identity?.Name;
+        ViewBag.Email = User.FindFirstValue(ClaimTypes.Email);
+        ViewBag.Role = User.IsInRole("Seller") ? "Seller" : "Buyer";
         return View();
     }
 }

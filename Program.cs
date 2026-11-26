@@ -14,9 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Liam's MVC marketplace
 builder.Services.AddControllersWithViews();
 
-// Edward's Razor Pages
-builder.Services.AddRazorPages();
-
 // External APIs
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<VehicleApiService>();
@@ -33,8 +30,30 @@ if (string.IsNullOrWhiteSpace(projectId))
         "Set Firebase:ProjectId using dotnet user-secrets before running.");
 }
 
+var credentialPath = builder.Configuration["Firebase:CredentialPath"];
+
+if (string.IsNullOrWhiteSpace(credentialPath))
+{
+    credentialPath = Environment.GetEnvironmentVariable(
+        "GOOGLE_APPLICATION_CREDENTIALS");
+}
+
+if (string.IsNullOrWhiteSpace(credentialPath) || !File.Exists(credentialPath))
+{
+    throw new InvalidOperationException(
+        "Set Firebase:CredentialPath to your service account JSON file.");
+}
+
+var credential = CredentialFactory
+    .FromFile<ServiceAccountCredential>(credentialPath)
+    .ToGoogleCredential();
+
 // Firestore database
-builder.Services.AddSingleton(FirestoreDb.Create(projectId));
+builder.Services.AddSingleton(new FirestoreDbBuilder
+{
+    ProjectId = projectId,
+    GoogleCredential = credential
+}.Build());
 
 // Firestore repositories
 builder.Services.AddSingleton<PartRepository>();
@@ -46,7 +65,7 @@ builder.Services.AddSingleton(provider =>
     return FirebaseApp.DefaultInstance ??
         FirebaseApp.Create(new AppOptions
         {
-            Credential = GoogleCredential.GetApplicationDefault(),
+            Credential = credential,
             ProjectId = projectId
         });
 });
@@ -106,10 +125,6 @@ app.UseAuthorization();
 
 // Edward's static asset mapping
 app.MapStaticAssets();
-
-// Edward's Razor Pages
-app.MapRazorPages()
-   .WithStaticAssets();
 
 // Liam's MVC controllers
 app.MapControllers();
